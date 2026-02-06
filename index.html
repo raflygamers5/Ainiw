@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Selamat Ulang Tahun, Aini!</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
+
+  <style>
+    :root {
+      --bg-gradient: linear-gradient(135deg, #f5e1fd 0%, #e0f2fe 100%);
+      --text-primary: #4c1d95;
+      --text-accent: #7e22ce;
+      --gold: #fbbf24;
+      --white: #ffffff;
+      --shadow: rgba(124, 58, 237, 0.25);
+    }
+
+    * { margin:0; padding:0; box-sizing:border-box; }
+
+    body {
+      min-height: 100vh;
+      font-family: 'Poppins', system-ui, sans-serif;
+      background: var(--bg-gradient);
+      color: var(--text-primary);
+      overflow-x: hidden;
+      position: relative;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px 15px;
+    }
+
+    .celestial-bg { position:fixed; inset:0; pointer-events:none; z-index:0; overflow:hidden; }
+    .sun, .moon {
+      position:absolute; width:300px; height:300px; opacity:0.32;
+      filter: drop-shadow(0 0 50px rgba(251,191,36,0.5));
+      animation: floatCelestial 32s infinite ease-in-out;
+    }
+    .sun { top:-120px; left:-100px; background:radial-gradient(circle at 40% 40%, #fff176 0%, #fbbf24 45%, transparent 75%); border-radius:50%; }
+    .moon { bottom:-140px; right:-120px; background:radial-gradient(circle at 60% 60%, #e0f2fe 0%, #c084fc 50%, transparent 80%); border-radius:50%; box-shadow:inset 0 0 70px rgba(255,255,255,0.7), 0 0 90px rgba(192,132,252,0.5); }
+    @keyframes floatCelestial { 0%,100% {transform:translate(0,0) rotate(0deg);} 50% {transform:translate(60px,-40px) rotate(4deg);} }
+
+    .particles { position:fixed; inset:0; pointer-events:none; z-index:1; }
+    .particle { position:absolute; background:rgba(255,255,255,0.75); border-radius:50%; box-shadow:0 0 12px rgba(255,255,255,0.9); animation:floatUp 20s infinite linear; opacity:0.5; }
+    @keyframes floatUp { 0% {transform:translateY(110vh) scale(0.4);} 100% {transform:translateY(-40vh) scale(0.9);} }
+
+    .container { position:relative; z-index:10; text-align:center; max-width:920px; width:100%; }
+
+    h1#name {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(3.8rem, 11vw, 9rem);
+      font-weight: 800;
+      margin-bottom: 0.15em;
+      color: var(--text-accent);
+      text-shadow: 0 8px 30px var(--shadow), 0 0 20px rgba(126,34,206,0.4);
+      -webkit-text-stroke: 1.5px rgba(126,34,206,0.15);
+      white-space: pre-wrap;
+      letter-spacing: -1px;
+    }
+
+    .age {
+      font-size: clamp(3.5rem, 10vw, 8rem);
+      font-weight: 800;
+      color: var(--gold);
+      text-shadow: 0 10px 35px rgba(251,191,36,0.5);
+      margin: 0.1em 0 0.7em;
+      letter-spacing: -2px;
+    }
+
+    .message {
+      font-size: clamp(1.15rem, 4.2vw, 1.5rem);
+      line-height: 1.7;
+      max-width: 760px;
+      margin: 1.8rem auto 2.5rem;
+      color: #2d1b4e;
+      opacity: 0;
+      transform: translateY(40px);
+      animation: fadeUpMsg 1.4s 2s forwards ease-out;
+      text-align: left;
+    }
+
+    @keyframes fadeUpMsg { to { opacity:1; transform:translateY(0); } }
+
+    .photos { display:flex; flex-wrap:wrap; justify-content:center; gap:24px; margin:2.5rem 0 3rem; }
+    .polaroid { width:170px; background:var(--white); padding:14px 14px 32px; box-shadow:0 10px 30px rgba(0,0,0,0.15); transform:rotate(-4deg); transition:0.4s; opacity:0; animation:polaroidPop 1s forwards; }
+    .polaroid:nth-child(2){transform:rotate(3deg); animation-delay:0.5s;}
+    .polaroid:nth-child(3){transform:rotate(-2deg); animation-delay:1s;}
+    .polaroid:nth-child(4){transform:rotate(2.5deg); animation-delay:1.4s;}
+    .polaroid:hover { transform:scale(1.08) rotate(0deg)!important; box-shadow:0 20px 50px rgba(124,58,237,0.3); }
+    @keyframes polaroidPop { 0%{opacity:0; transform:scale(0.65) rotate(var(--rot,-4deg));} 60%{transform:scale(1.15) rotate(var(--rot,-4deg));} 100%{opacity:1; transform:scale(1) rotate(var(--rot,-4deg));} }
+    .polaroid img { width:100%; height:170px; object-fit:cover; border:10px solid white; box-shadow:inset 0 2px 8px rgba(0,0,0,0.08); }
+
+    .controls { 
+      display:flex; 
+      flex-wrap:wrap; 
+      justify-content:center; 
+      gap:1.5rem; 
+      margin-top: 1.5rem;
+    }
+
+    .btn { 
+      padding: 16px 40px; 
+      font-size: 1.18rem; 
+      font-weight: 700;                /* ← dibuat lebih tebal */
+      border:none; 
+      border-radius:9999px; 
+      cursor:pointer; 
+      transition:all 0.35s ease; 
+      display:inline-flex; 
+      align-items:center; 
+      gap:12px; 
+      letter-spacing: 0.5px;
+      text-shadow: 0 1px 3px rgba(0,0,0,0.2); /* ← tambah shadow teks biar tidak gepeng */
+      box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+    }
+
+    .btn-play { 
+      background: var(--text-accent); 
+      color: white; 
+    }
+    .btn-play:hover { 
+      background: #9333ea; 
+      transform: translateY(-5px) scale(1.05); 
+      box-shadow: 0 15px 30px rgba(147,51,234,0.5); 
+    }
+
+    .btn-confetti { 
+      background: white; 
+      color: var(--text-accent); 
+      border: 2px solid var(--text-accent); 
+    }
+    .btn-confetti:hover { 
+      background: #f3e8ff; 
+      transform: translateY(-5px) scale(1.05); 
+      box-shadow: 0 15px 30px rgba(124,58,237,0.3); 
+    }
+
+    .sparkle { position:absolute; width:10px; height:10px; background:var(--gold); clip-path:polygon(50%0%,61%35%,98%35%,68%57%,79%91%,50%70%,21%91%,32%57%,2%35%,39%35%); opacity:0; pointer-events:none; animation:sparkleMove 3s infinite; }
+    @keyframes sparkleMove { 0%,100%{opacity:0; transform:scale(0.6) translate(0,0);} 50%{opacity:0.95; transform:scale(1.5) translate(var(--dx),var(--dy));} }
+
+    @media (max-width:520px) {
+      .sun,.moon {width:200px; height:200px;}
+      .polaroid {width:140px;}
+      .polaroid img {height:140px;}
+      .btn { padding:14px 32px; font-size:1.08rem; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="celestial-bg">
+  <div class="sun"></div>
+  <div class="moon"></div>
+</div>
+
+<div class="particles" id="particles"></div>
+
+<div class="container">
+  <h1 id="name"></h1>
+  <div class="age" id="age">0</div>
+  <div class="message" id="message"></div>
+  <div class="photos" id="photos"></div>
+
+  <div class="controls">
+    <button class="btn btn-play" id="playBtn"><i class="fas fa-play"></i> Putar Musik Ulang Tahun</button>
+    <button class="btn btn-confetti" id="confettiBtn"><i class="fas fa-burst"></i> Confetti Lagi!</button>
+  </div>
+</div>
+
+<audio id="bdayAudio" loop>
+  <source src="https://www.orangefreesounds.com/wp-content/uploads/2016/08/Happy-birthday-instrumental.mp3" type="audio/mpeg">
+</audio>
+
+<script>
+const SETTINGS = {
+  name: "Sri Nur Aini Febriyanti",
+  age: 20,
+  message: `Selamat ulang tahun, Aini sayangkuuu 🤍
+
+Today aku cuma mau bilang: terima kasih karena kamu lahir, terima kasih karena kamu ada, dan terima kasih karena sudah membuat hati aku belajar merasakan segalanya dengan cara yang jauh lebih dalam dari yang pernah aku bayangin sebelumnya.
+
+Aku tau ini akan alay dan lebay (yang Aini ga sukain, ik) tapi tolong, biarin aku jadi alay lagi buat kali ini aini, biarin aku ungkapin apa yang aku rasa.
+
+Aini, aku udah baca ratusan atau bahkan ribuan puisi, hafal banyak metafora indah about love, tapi setiap saat aku coba rangkai kata buat kamu, all i could remember just ur beauty name, ur dreamy eyes, ur shiny hair, ur sweety smile and those warm feeling that i feel every time with you aini.
+
+Sekarang kamu udah jadi my habit Aini. Setiap wild flower yang aku lihat di jalan, aku mau petik, unjukin lalu kasih ke kamu. Setiap senja yang indah muncul di langit, aku mau kita kagumin bersama. Setiap rembulan yang aku pandang berubah jadi doa aku dalam sunyi, untuk berharap kamu melihat keindahan ini juga, n let you feel less alone in it.
+
+Aku mau paham kamu aini, aku mau tau kamu seperti rintik hujan jatuh yang tau setiap sudut daun yang dia sentuh, perlahan, menyeluruh, tanpa takut atau terburu-buru. Aku mau pikiran yang ga pernah kamu suarakan, perasaan yang selalu kamu lipat di kesunyian, bagian dari kamu yang selalu di sembunyikan bahkan dari diri kamu sendiri. Not in creepy way please, i want to cradle them, so every time u near me, the air feels safe enough to breathe, soft enough to rest.
+
+Everything i feel for u is real Aii. My intentions are pure and i just want to see u happy. I love that we each carry a secret chamber of the other life, yours only im allowed to enter, mine only you have ever seen. I love how the rest of the world fades when we re spend our time together and keep learning each other in the gentlest, deepest way.
+
+Please, dont bury ur sadness from me. Ik im far from perfect, and never pretend to be, but with u, ill always try my best to be a better person. Even when the world feels heaviest, i wont walk away. Not from you, never from you.
+
+Aku tau ada hari yang dingin, balasan singkat dan dingin, serta kesalahpahaman yang selalu nemanin kita kedepannya, tapi aku tau dan masih mau ngehadapin semua itu, sayangnya aku gabisa sendiri Aini, kamu harus partisipasi aktif disini sama aku. As long as u always take my hand with you, i will not turn around.
+
+Terima kasih Aini, karena kamu aku percaya "selalu ingin lebih" itu indah. Cuz no matter how many night we steal together, my heart always beg for more, more dawns with u, more midnight, more time, n more u in every my lifetime.
+
+Hari ini, di hari ulang tahun kamu, aku cuma berharap:
+Semoga kamu selalu merasa aman, selalu bisa jadi diri kamu apa adanya di dekat aku. Senyumnya, diamnya, sedihnya, semuanya.
+
+Karena aku di sini bukan cuma buat lonceng merdu tawa kamu atau lengkung indah senyum kamu, tapi juga untuk seluruh dirimu. Yes aini, for ur quiet too, for the silences that carry weight, for the night when words feel too heavy to lift. Just lemme hold them with you.
+
+Selamat ulang tahun, Aini.
+Gadisku yang unik, my girl who is soft enough to feel the whole world, and though enough to carry it anyway.
+
+Aku sayang kamu in every lifetime Ainiih, past lives, this one, and all the unwritten ones that still waiting for us to explore more. Always more, always you. 🌙✨
+
+Happy birthday, my soft & tough girl.`,
+  photos: [
+    "https://drive.google.com/uc?export=view&id=1ITWm1uIV8_pf4_YxERwAUCEdqT66HX2k",
+    "https://drive.google.com/uc?export=view&id=1IVjAw7tNpNBFNpJgnHElU0eEyD7mB82i",
+    "https://drive.google.com/uc?export=view&id=1IWzdoUxSvb6RhLQmLzcMX4-1O3_aUL9F",
+    "https://drive.google.com/uc?export=view&id=1IZSF9cwUK3QAZWn4Z8lmEaQAtVRm4i_Y"
+  ]
+};
+
+// Typing nama
+const nameElement = document.getElementById("name");
+let charIndex = 0;
+function typeName() {
+  if (charIndex < SETTINGS.name.length) {
+    nameElement.textContent += SETTINGS.name.charAt(charIndex);
+    charIndex++;
+    setTimeout(typeName, 110);
+  }
+}
+
+// Count-up umur
+function animateAge() {
+  let current = 0;
+  const target = SETTINGS.age;
+  const duration = 2800;
+  const step = 40;
+  const increment = target / (duration / step);
+  const ageEl = document.getElementById("age");
+  const counter = setInterval(() => {
+    current += increment;
+    ageEl.textContent = Math.floor(current);
+    if (current >= target) {
+      ageEl.textContent = target;
+      clearInterval(counter);
+    }
+  }, step);
+}
+
+// Confetti
+function launchConfetti() {
+  confetti({
+    particleCount: 180,
+    spread: 80,
+    startVelocity: 32,
+    origin: { y: 0.55 },
+    colors: ['#c084fc', '#fbbf24', '#a78bfa', '#f472b6', '#67e8f9']
+  });
+}
+
+// Sparkles
+function addSparkles() {
+  const h1 = document.querySelector('h1');
+  for (let i = 0; i < 14; i++) {
+    const sparkle = document.createElement('div');
+    sparkle.className = 'sparkle';
+    const angle = Math.random() * 360;
+    const distance = 80 + Math.random() * 140;
+    const dx = Math.cos(angle * Math.PI / 180) * distance + 'px';
+    const dy = Math.sin(angle * Math.PI / 180) * distance + 'px';
+    sparkle.style.setProperty('--dx', dx);
+    sparkle.style.setProperty('--dy', dy);
+    sparkle.style.animationDelay = (Math.random() * 2.5) + 's';
+    sparkle.style.left = (Math.random() * 100) + '%';
+    sparkle.style.top = (Math.random() * 100) + '%';
+    h1.appendChild(sparkle);
+  }
+}
+
+// Particles
+function createParticles() {
+  const container = document.getElementById('particles');
+  for (let i = 0; i < 28; i++) {
+    const p = document.createElement('div');
+    p.className = 'particle';
+    const size = 3 + Math.random() * 7;
+    p.style.width = p.style.height = size + 'px';
+    p.style.left = Math.random() * 100 + 'vw';
+    p.style.animationDuration = (14 + Math.random() * 18) + 's';
+    p.style.animationDelay = Math.random() * 12 + 's';
+    container.appendChild(p);
+  }
+}
+
+// Init semua
+window.addEventListener('load', () => {
+  document.getElementById("message").innerHTML = SETTINGS.message.replace(/\n/g, '<br>');
+
+  const photoContainer = document.getElementById("photos");
+  photoContainer.innerHTML = '';
+  SETTINGS.photos.forEach((src, i) => {
+    const div = document.createElement('div');
+    div.className = 'polaroid';
+    div.innerHTML = `<img src="\( {src}" alt="foto \){i+1}" loading="lazy">`;
+    photoContainer.appendChild(div);
+  });
+
+  setTimeout(typeName, 800);
+  setTimeout(animateAge, 1400);
+  setTimeout(launchConfetti, 1000);
+
+  addSparkles();
+  createParticles();
+
+  const audio = document.getElementById("bdayAudio");
+  const playBtn = document.getElementById("playBtn");
+
+  playBtn.addEventListener('click', () => {
+    if (audio.paused) {
+      audio.play().catch(err => console.log("Play dicegah:", err));
+      playBtn.innerHTML = '<i class="fas fa-pause"></i> Pause Musik';
+    } else {
+      audio.pause();
+      playBtn.innerHTML = '<i class="fas fa-play"></i> Putar Musik Ulang Tahun';
+    }
+  });
+
+  document.getElementById("confettiBtn").addEventListener('click', launchConfetti);
+});
+</script>
+</body>
+</html>
